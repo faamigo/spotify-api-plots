@@ -4,10 +4,12 @@
 This program plots audio features for all tracks of one or two artists simultaneously.
 
 ### Parameters:
-```artist_id```, ```artist_id_1``` and ```artist_id_2``` : Artists ids.
-```x_``` : x-axis audio feature.
-```y_``` : y-axis audio feature.
-```hue_``` : Hue grouping attribute.
+
+- ```artist_id```, ```artist_id_1``` and ```artist_id_2``` : Artists ids.
+- ```x_``` : x-axis audio feature.
+- ```y_``` : y-axis audio feature.
+- ```hue_``` : Hue grouping attribute.
+
 ### Available methods:
 
 - ```search_artist(self)  ``` : You will be prompted on console to search for an artist. Return an array with all results on the following format:  ```[artist_id] [artist_name] [artist_genres]```.
