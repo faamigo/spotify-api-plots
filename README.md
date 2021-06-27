@@ -1,7 +1,8 @@
 # Spotify API
 ## Plotting Audio Features
 
-This program plot audio features for all tracks of a specfic artis.
+This program plot audio features for all tracks of a specfic artists.
+
 For example:
 - Danceability
 - Valence
