@@ -10,11 +10,11 @@ This program plots audio features for all tracks of one or two artists simultane
 ```hue_``` : Hue grouping attribute.
 ### Available methods:
 
-- ```search_artist(self)  ``` : Will ask you on console to search an artist. Return an array with all results on the following format:  ```[artist_id] [artist_name] [artist_genres]```.
+- ```search_artist(self)  ``` : You will be prompted on console to search for an artist. Return an array with all results on the following format:  ```[artist_id] [artist_name] [artist_genres]```.
 
-- ```plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_)``` : Plot all albums of two bands simultaneously
+- ```plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_)``` : Plot all albums of two artists simultaneously.
 
-- ```plot_artist_albums(self, artist_id, x_, y_, hue_)``` : Plot all albums of one band.
+- ```plot_artist_albums(self, artist_id, x_, y_, hue_)``` : Plot all albums of one artist.
 
 ### Hue grouping attributes available:
 - ```artist_name```
