@@ -3,7 +3,25 @@
 
 This program plots audio features for all tracks of one or two artists simultaneously.
 
-Audio features available:
+### Available methods:
+
+- ```search_artist(self)  ``` : Will ask you on console to search an artist. Return an array with all results on the following format:  ```[artist_id] [artist_name] [artist_genres]```.
+
+#### Parameters:
+```artist_id```, ```artist_id_1``` and ```artist_id_2``` : Artists ids found with search function.
+```x_```: x-axis audio feature.
+```y_```: y-axis audio feature.
+```hue_```: Hue grouping attribute.
+- ```plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_):```
+
+- ```plot_artist_albums(self, artist_id, x_, y_, hue_):```
+
+### Hue grouping attributes available:
+- Artist name
+- Album name
+- Release date
+
+### Audio features available:
 - Acousticness: A confidence measure of whether the track is acoustic. (0.0 - 1.0)
 - Danceability: Value represents whether the track is less or more danceable. (0.0 - 1.0)
 - Energy: Represents a perceptual measure of intensity and activity. (0.0 - 1.0)
