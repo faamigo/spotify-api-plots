@@ -14,5 +14,5 @@ Audio features available:
 - Mode: Major is represented by 1 and minor is 0.
 - Speechiness: The more exclusively speech-like the recording, the closer to 1.0 the attribute value.
 - Tempo: The overall estimated tempo of a track in beats per minute (BPM).
-- Time signature: An estimated overall time signature of a track. Specify how many beats are in each bar (or measure).
+- Time signature: An estimated overall time signature. Specify how many beats are in each bar (or measure).
 - Valence: A measure describing the musical positiveness conveyed by a track. (0.0 - 1.0).
