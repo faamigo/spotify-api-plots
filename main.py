@@ -103,20 +103,20 @@ class Spotify:
         
         return (tracks_features, n_albums)
        
-    def plot_two_artists_albums(self, artist_1, artist_2, x_, y_, hue_):
+    def plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_):
 
-        res = self.get_all_tracks_audio_features(artist_1, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_1_id, x_, y_, hue_)
         data_1 = res[0]
 
-        res = self.get_all_tracks_audio_features(artist_2, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_2_id, x_, y_, hue_)
         data_2 = res[0]
 
         data = data_1 + data_2
         plot_albums(data, x_, y_, hue_, 2)
 
-    def plot_artist_albums(self, artist, x_, y_, hue_):
+    def plot_artist_albums(self, artist_id, x_, y_, hue_):
 
-        res = self.get_all_tracks_audio_features(artist, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_id, x_, y_, hue_)
         data = res[0]
         n_albums = res[1]
 
