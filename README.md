@@ -1,7 +1,7 @@
 # Analysing tracks audio-features using Spotify API
 ## Plotting Audio Features
 
-This program plots audio features for all tracks of a one or two artists simultaneously.
+This program plots audio features for all tracks of one or two artists simultaneously.
 
 Audio features available:
 - Acousticness: A confidence measure of whether the track is acoustic. (0.0 - 1.0)
