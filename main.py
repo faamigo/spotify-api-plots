@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from credentials import CLIENT_ID, CLIENT_SECRET
+from plot_albums import plot_albums
+
 
 class Spotify:
 
@@ -37,7 +39,7 @@ class Spotify:
             return res
             
 
-    def plot_all_artist_albums(self, artist_id, x_, y_, hue_):
+    def get_all_tracks_audio_features(self, artist_id, x_, y_, hue_):
 
         res_albums = requests.get(self.base_url + 'artists/' + artist_id + '/albums', 
                         headers=self.headers, 
@@ -68,7 +70,8 @@ class Spotify:
         for album in all_albums:
             for track in album['tracks']['items']:
                 all_tracks[track['id']] = {'track_number': track['track_number'], 'name': track['name'],
-                                           'album_name': album['name'], 'release_date': album['release_date']}
+                                           'album_name': album['name'], 'artist_name': track['artists'][0]['name'], 
+                                           'release_date': album['release_date']}
 
         # Adding audio features to track info
         n_tracks = len(all_tracks)
@@ -95,32 +98,29 @@ class Spotify:
             tracks_features[k]['name'] = all_tracks[id_]['name']
             tracks_features[k]['album_name'] = all_tracks[id_]['album_name']
             tracks_features[k]['release_date'] = all_tracks[id_]['release_date']
+            tracks_features[k]['artist_name'] = all_tracks[id_]['artist_name']
             k += 1
         
-        # Plot settings
-        df = pd.DataFrame(tracks_features)
-        df['release_date'] = pd.to_datetime(df['release_date'])
-        df = df.sort_values(['release_date', 'album_name', 'track_number'], ascending=[True, True, True])
-        
-        aggregate = df.groupby('album_name').agg({x_:'mean', y_: 'mean', 'duration_ms': 'sum'}).reset_index()
-        aggregate['duration_ms'] = pd.to_datetime(aggregate['duration_ms'], unit='ms')
-        aggregate['duration_ms'] = pd.to_datetime(aggregate['duration_ms'], format= '%H:%M:%S').dt.time
-        print(aggregate)
+        return (tracks_features, n_albums)
+       
+    def plot_two_artists_albums(self, artist_1, artist_2, x_, y_, hue_):
 
-        plt.figure(figsize=(12,8))
-        ax = sns.scatterplot(data=aggregate, x=x_, y=y_, 
-                            hue=hue_, palette='muted', 
-                            size='duration_ms', sizes=(100,2000), 
-                            alpha=.7)
-        
-        handles,labels = ax.get_legend_handles_labels()
-        ax.legend(handles[1:10], labels[1:n_albums+1], loc='center left',
-                bbox_to_anchor=(1, 0.5),
-                title=None,
-                frameon=False)
-        plt.subplots_adjust(right=0.65)
-        plt.show()
+        res = self.get_all_tracks_audio_features(artist_1, x_, y_, hue_)
+        data_1 = res[0]
 
+        res = self.get_all_tracks_audio_features(artist_2, x_, y_, hue_)
+        data_2 = res[0]
+
+        data = data_1 + data_2
+        plot_albums(data, x_, y_, hue_, 2)
+
+    def plot_artist_albums(self, artist, x_, y_, hue_):
+
+        res = self.get_all_tracks_audio_features(artist, x_, y_, hue_)
+        data = res[0]
+        n_albums = res[1]
+
+        plot_albums(data, x_, y_, hue_, n_albums)
 
     def search_artist(self):
 
@@ -142,10 +142,10 @@ if __name__ == '__main__':
     res = spotify_api.authentication(CLIENT_ID, CLIENT_SECRET)    
 
     if res == 'authenticated':
-        response = spotify_api.search_artist()
-        if response != None:
-            for res in response:
-                print(response[res]['id'], res, response[res]['genres'])
+        response_1 = spotify_api.search_artist()
+        if response_1 != None:
+            for res in response_1:
+                print(response_1[res]['id'], res, response_1[res]['genres'])
             
-            artist_id = input("Enter artist id: ")
-            spotify_api.plot_all_artist_albums(artist_id, 'danceability', 'valence', 'album_name')
+            artist_id_1 = input("Enter artist id: ")
+            spotify_api.plot_artist_albums(artist_id_1, 'danceability', 'valence', 'album_name')
