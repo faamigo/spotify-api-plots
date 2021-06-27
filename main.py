@@ -107,14 +107,18 @@ class Spotify:
         aggregate['duration_ms'] = pd.to_datetime(aggregate['duration_ms'], format= '%H:%M:%S').dt.time
         print(aggregate)
 
-        plt.figure(figsize=(8,8))
+        plt.figure(figsize=(12,8))
         ax = sns.scatterplot(data=aggregate, x=x_, y=y_, 
                             hue=hue_, palette='muted', 
-                            size='duration_ms', sizes=(50,1000), 
+                            size='duration_ms', sizes=(100,2000), 
                             alpha=.7)
         
         handles,labels = ax.get_legend_handles_labels()
-        ax.legend(handles[1:20], labels[1:n_albums+1], loc='best', title=None, frameon=False)
+        ax.legend(handles[1:10], labels[1:n_albums+1], loc='center left',
+                bbox_to_anchor=(1, 0.5),
+                title=None,
+                frameon=False)
+        plt.subplots_adjust(right=0.65)
         plt.show()
 
 
