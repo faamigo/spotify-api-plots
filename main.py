@@ -39,7 +39,7 @@ class Spotify:
             return res
             
 
-    def get_all_tracks_audio_features(self, artist_id, x_, y_, hue_):
+    def get_all_tracks_audio_features(self, artist_id):
 
         res_albums = requests.get(self.base_url + 'artists/' + artist_id + '/albums', 
                         headers=self.headers, 
@@ -105,10 +105,10 @@ class Spotify:
        
     def plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_):
 
-        res = self.get_all_tracks_audio_features(artist_1_id, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_1_id)
         data_1 = res[0]
 
-        res = self.get_all_tracks_audio_features(artist_2_id, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_2_id)
         data_2 = res[0]
 
         data = data_1 + data_2
@@ -116,7 +116,7 @@ class Spotify:
 
     def plot_artist_albums(self, artist_id, x_, y_, hue_):
 
-        res = self.get_all_tracks_audio_features(artist_id, x_, y_, hue_)
+        res = self.get_all_tracks_audio_features(artist_id)
         data = res[0]
         n_albums = res[1]
 
