@@ -1,8 +1,4 @@
-from matplotlib import artist
 import requests
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from credentials import CLIENT_ID, CLIENT_SECRET
 from plot_albums import plot_albums
