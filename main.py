@@ -1,3 +1,4 @@
+from matplotlib import artist
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,8 +12,8 @@ class Spotify:
 
     def __init__(self):
 
-        self.auth_url = "https://accounts.spotify.com/api/token"
-        self.base_url = "https://api.spotify.com/v1/"
+        self.auth_url = 'https://accounts.spotify.com/api/token'
+        self.base_url = 'https://api.spotify.com/v1/'
         self.access_token = ''
         self.headers = {}
     
@@ -24,26 +25,26 @@ class Spotify:
             'client_secret': client_secret,
         })
 
-        if auth_response.status_code == 200:
-            res = "authenticated"
-            auth_response_data = auth_response.json()
-            self.access_token = auth_response_data['access_token']
-            self.headers = {
-                'Authorization': 'Bearer {token}'.format(token=self.access_token)
-            }
-            return res      
-
-        else:
-            res = "authentication error"
-            print(res)
-            return res
+        if auth_response.status_code != 200:
+            print("error: authentication error")
+            return
             
+        auth_response_data = auth_response.json()
+        self.access_token = auth_response_data['access_token']
+        self.headers = {
+            'Authorization': 'Bearer {token}'.format(token=self.access_token)
+        }
+                 
 
     def get_all_tracks_audio_features(self, artist_id):
 
         res_albums = requests.get(self.base_url + 'artists/' + artist_id + '/albums', 
                         headers=self.headers, 
                         params={'include_groups': 'album','limit': 50})
+
+        if res_albums.status_code != 200:
+            return "error"
+
         artist_albums = res_albums.json()
         
         # GET all albums ids
@@ -101,31 +102,35 @@ class Spotify:
             tracks_features[k]['artist_name'] = all_tracks[id_]['artist_name']
             k += 1
         
-        return (tracks_features, n_albums)
+        return tracks_features
        
     def plot_two_artists_albums(self, artist_1_id, artist_2_id, x_, y_, hue_):
 
-        res = self.get_all_tracks_audio_features(artist_1_id)
-        data_1 = res[0]
-
-        res = self.get_all_tracks_audio_features(artist_2_id)
-        data_2 = res[0]
-
+        data_1 = self.get_all_tracks_audio_features(artist_1_id)
+        if data_1 == 'error':
+            return 'error'
+        
+        data_2 = self.get_all_tracks_audio_features(artist_2_id)
         data = data_1 + data_2
+
         plot_albums(data, x_, y_, hue_, 2)
 
-    def plot_artist_albums(self, artist_id, x_, y_, hue_):
+    def plot_artist_albums(self, artist_id, x_, y_, hue_, start_date, end_date):
 
-        res = self.get_all_tracks_audio_features(artist_id)
-        data = res[0]
-        n_albums = res[1]
+        data = self.get_all_tracks_audio_features(artist_id)
+        if res == 'error':
+            print("error: invalid id")
+            return
 
-        plot_albums(data, x_, y_, hue_, n_albums)
+        plot_albums(data, x_, y_, hue_, start_date, end_date)
 
     def search_artist(self):
 
         query = input("Search artist: ")
         res = requests.get(self.base_url + 'search?q=' + query + '&type=artist', headers=self.headers)
+
+        if res.status_code != 200:
+            return 'error'
         artists = res.json()['artists']['items']
 
         artists_id = {}
@@ -141,11 +146,13 @@ if __name__ == '__main__':
     spotify_api = Spotify()
     res = spotify_api.authentication(CLIENT_ID, CLIENT_SECRET)    
 
-    if res == 'authenticated':
+    if res != 'error':
         response_1 = spotify_api.search_artist()
-        if response_1 != None:
+        if response_1 != 'error':
             for res in response_1:
                 print(response_1[res]['id'], res, response_1[res]['genres'])
             
             artist_id_1 = input("Enter artist id: ")
-            spotify_api.plot_artist_albums(artist_id_1, 'danceability', 'valence', 'album_name')
+            spotify_api.plot_artist_albums(artist_id_1, 'danceability', 'valence', 'album_name', 1990, 2021)
+        else:
+            print("error: empty query")
